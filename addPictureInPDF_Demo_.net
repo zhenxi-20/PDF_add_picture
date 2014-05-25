@@ -1,3 +1,4 @@
+   // For using this method ,you must download 'itextsharp.dll'. using iTextSharp.text.pdf.
    private void ConvertToPicPDF(string sourcePath, string targetPath, string imageFilePath, int newImgW, int newImgH, int imgLocX, int imgLocY)
     {
         // 元ファイル
