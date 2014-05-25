@@ -1,0 +1,48 @@
+   private void ConvertToPicPDF(string sourcePath, string targetPath, string imageFilePath, int newImgW, int newImgH, int imgLocX, int imgLocY)
+    {
+        // 元ファイル
+        PdfReader pdfReader = null;
+        // 目的ファイル
+        PdfStamper pdfStamper = null;
+        try
+        {
+            // 元ファイル
+            pdfReader = new PdfReader(sourcePath);
+            // 目的ファイル
+            pdfStamper = new PdfStamper(pdfReader, new FileStream(targetPath, FileMode.Create));
+            // イメージ
+            iTextSharp.text.Image img = iTextSharp.text.Image.GetInstance(imageFilePath);
+            img.ScaleAbsolute(newImgW, newImgH);
+            // イメージの位置を固定する
+            img.SetAbsolutePosition(imgLocX, imgLocY);
+            iTextSharp.text.pdf.PdfContentByte underContent;
+            // ページカウント
+            int pageCount = pdfReader.NumberOfPages;
+            // 毎ページごとに、イメージを付き
+            for (int i = 1; i <= pageCount; i++)
+            {
+                underContent = pdfStamper.GetUnderContent(i);
+
+                underContent.AddImage(img);
+
+            }
+            
+        }
+        catch (Exception ex)
+        {
+            Logger.Error(ex.Message);
+            Logger.Debug(ex.StackTrace);
+            throw ex;
+        }
+        finally
+        {
+            if (pdfStamper != null)
+            {
+                pdfStamper.Close();
+            }
+            if (pdfReader != null)
+            {
+                pdfReader.Close();
+            }
+        }
+    }
